@@ -262,12 +262,42 @@ int main()
     displayDiagonalSums(A, "A");
 
     // 5-7. Each call works on a copy; A itself is never modified.
-    swapRows(A);       // default: rows 0 and 1
-    swapRows(A, 0, 2); // custom indices
-    swapColumns(A);    // default: columns 0 and 1
-    swapColumns(A, 0, 2);
-    updateElement(A);              // default: (0, 0) = 100
-    updateElement(A, 1, 2, 99);    // custom values
+
+    // Defaults (rows/columns 0 and 1; element (0, 0) = 100)
+    swapRows(A);
+    swapColumns(A);
+    updateElement(A);
+
+    // User-specified values (indices start at 0)
+    int r1, r2, c1, c2, row, col;
+    long long value;
+
+    cout << "Problem 5 - Enter two row indices to swap: ";
+    if (cin >> r1 >> r2)
+        swapRows(A, r1, r2);
+    else
+    {
+        cout << "Invalid input for row indices.\n";
+        return 1;
+    }
+
+    cout << "Problem 6 - Enter two column indices to swap: ";
+    if (cin >> c1 >> c2)
+        swapColumns(A, c1, c2);
+    else
+    {
+        cout << "Invalid input for column indices.\n";
+        return 1;
+    }
+
+    cout << "Problem 7 - Enter row index, column index, and new value: ";
+    if (cin >> row >> col >> value)
+        updateElement(A, row, col, value);
+    else
+    {
+        cout << "Invalid input for the update.\n";
+        return 1;
+    }
 
     return 0;
 }
