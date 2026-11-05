@@ -2,6 +2,8 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <limits>
+#include <sstream>
 #include <stdexcept>
 #include <string>
 #include <utility>
@@ -262,41 +264,82 @@ int main()
     displayDiagonalSums(A, "A");
 
     // 5-7. Each call works on a copy; A itself is never modified.
+    // Press Enter to use the defaults, or type your own values (indices start at 0).
+    // Typing fewer values than the maximum uses the defaults for the rest.
+    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // discard leftover newline
+    string line;
 
-    // Defaults (rows/columns 0 and 1; element (0, 0) = 100)
-    swapRows(A);
-    swapColumns(A);
-    updateElement(A);
-
-    // User-specified values (indices start at 0)
-    int r1, r2, c1, c2, row, col;
-    long long value;
-
-    cout << "Problem 5 - Enter two row indices to swap: ";
-    if (cin >> r1 >> r2)
-        swapRows(A, r1, r2);
-    else
+    // Problem 5: swap rows (default 0 and 1)
+    cout << "Problem 5 - Enter row indices to swap (Enter = default 0 1): ";
+    getline(cin, line);
     {
-        cout << "Invalid input for row indices.\n";
-        return 1;
+        istringstream iss(line);
+        int r1, r2, count = 0;
+        if (iss >> r1)
+        {
+            count = 1;
+            if (iss >> r2)
+                count = 2;
+        }
+        if (iss.fail() && !iss.eof())
+            cout << "Problem 5 - Invalid input.\n";
+        else if (count == 0)
+            swapRows(A);
+        else if (count == 1)
+            swapRows(A, r1);
+        else
+            swapRows(A, r1, r2);
     }
 
-    cout << "Problem 6 - Enter two column indices to swap: ";
-    if (cin >> c1 >> c2)
-        swapColumns(A, c1, c2);
-    else
+    // Problem 6: swap columns (default 0 and 1)
+    cout << "Problem 6 - Enter column indices to swap (Enter = default 0 1): ";
+    getline(cin, line);
     {
-        cout << "Invalid input for column indices.\n";
-        return 1;
+        istringstream iss(line);
+        int c1, c2, count = 0;
+        if (iss >> c1)
+        {
+            count = 1;
+            if (iss >> c2)
+                count = 2;
+        }
+        if (iss.fail() && !iss.eof())
+            cout << "Problem 6 - Invalid input.\n";
+        else if (count == 0)
+            swapColumns(A);
+        else if (count == 1)
+            swapColumns(A, c1);
+        else
+            swapColumns(A, c1, c2);
     }
 
-    cout << "Problem 7 - Enter row index, column index, and new value: ";
-    if (cin >> row >> col >> value)
-        updateElement(A, row, col, value);
-    else
+    // Problem 7: update element (default row 0, column 0, value 100)
+    cout << "Problem 7 - Enter row, column, value (Enter = default 0 0 100): ";
+    getline(cin, line);
     {
-        cout << "Invalid input for the update.\n";
-        return 1;
+        istringstream iss(line);
+        int row, col, count = 0;
+        long long value;
+        if (iss >> row)
+        {
+            count = 1;
+            if (iss >> col)
+            {
+                count = 2;
+                if (iss >> value)
+                    count = 3;
+            }
+        }
+        if (iss.fail() && !iss.eof())
+            cout << "Problem 7 - Invalid input.\n";
+        else if (count == 0)
+            updateElement(A);
+        else if (count == 1)
+            updateElement(A, row);
+        else if (count == 2)
+            updateElement(A, row, col);
+        else
+            updateElement(A, row, col, value);
     }
 
     return 0;
